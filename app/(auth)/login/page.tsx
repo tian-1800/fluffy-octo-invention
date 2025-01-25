@@ -1,29 +1,30 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { LoginData, useLoginMutation } from "@/lib/redux/services/api";
+import { useLoginMutation } from "@/lib/redux/services/member-api";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "@/lib/redux/features/authSlice";
 import { useRouter } from "next/navigation";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import LoginFooter from "@/components/footer/login";
 import { useState } from "react";
+import { LoginPayload } from "@/lib/redux/utils/types";
 
 export default function LoginPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginData>();
+  } = useForm<LoginPayload>();
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = async (data: LoginData) => {
+  const onSubmit = async (data: LoginPayload) => {
     try {
       const result = await login(data).unwrap();
-      dispatch(setCredentials(result));
+      dispatch(setCredentials({ token: result }));
       router.push("/");
     } catch (err) {
       console.error("Failed to login:", err);

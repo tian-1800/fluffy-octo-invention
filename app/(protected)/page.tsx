@@ -1,12 +1,12 @@
 "use client";
 
-import { useGetProfileQuery } from "@/lib/redux/services/api";
-import { FiUser } from "react-icons/fi";
+import { useGetProfileQuery } from "@/lib/redux/services/member-api";
+import Image from "next/image";
 
 export default function Home() {
   const { data: profile, isLoading, error } = useGetProfileQuery();
 
-  if (isLoading) {
+  if (isLoading || !profile) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">Loading...</div>
@@ -28,13 +28,18 @@ export default function Home() {
         <div className="bg-white shadow rounded-lg p-6">
           <div className="flex items-center space-x-4">
             <div className="bg-indigo-100 p-3 rounded-full">
-              <FiUser className="h-6 w-6 text-indigo-600" />
+              <Image
+                src={profile.profile_image}
+                alt={profile.name}
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-full"
+              />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                Welcome, {profile?.name}!
+                Welcome, {profile.name}
               </h1>
-              <p className="text-gray-500">{profile?.email}</p>
             </div>
           </div>
         </div>

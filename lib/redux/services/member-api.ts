@@ -1,23 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
+import {
+  LoginPayload,
+  ProfileData,
+  RegistrationPayload,
+  Response,
+} from "../utils/types";
 
-export type LoginData = {
-  email: string;
-  password: string;
-};
-export type RegistrationData = {
-  email: string;
-  first_name: string;
-  last_name: string;
-  password: string;
-};
-export type ProfileData = {
-  name: string;
-  email: string;
-};
-
-export const apiSlice = createApi({
-  reducerPath: "api",
+export const memberApi = createApi({
+  reducerPath: "memberApi",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_URL,
     prepareHeaders: (headers, { getState }) => {
@@ -29,14 +20,23 @@ export const apiSlice = createApi({
     },
   }),
   endpoints: (builder) => ({
-    login: builder.mutation<{ token: string }, LoginData>({
+    login: builder.mutation<string, LoginPayload>({
       query: (credentials) => ({
         url: "/login",
         method: "POST",
         body: credentials,
       }),
+      transformResponse: (response: Response<{ token: string }>) => {
+        return response.data.token;
+      },
+      transformErrorResponse: (response) => {
+        return {
+          status: response.status,
+          message: "Gagal login. Silakan coba lagi",
+        };
+      },
     }),
-    register: builder.mutation<{ status: string }, RegistrationData>({
+    register: builder.mutation<{ status: string }, RegistrationPayload>({
       query: (userData) => ({
         url: "/registration",
         method: "POST",
@@ -45,6 +45,12 @@ export const apiSlice = createApi({
     }),
     getProfile: builder.query<ProfileData, void>({
       query: () => "/profile",
+      transformResponse: (response: Response<ProfileData>) => {
+        return {
+          ...response.data,
+          name: `${response.data.first_name} ${response.data.last_name}`,
+        };
+      },
     }),
     updateProfile: builder.mutation<{ status: string }, ProfileData>({
       query: (userData) => ({
@@ -61,4 +67,4 @@ export const {
   useRegisterMutation,
   useGetProfileQuery,
   useUpdateProfileMutation,
-} = apiSlice;
+} = memberApi;

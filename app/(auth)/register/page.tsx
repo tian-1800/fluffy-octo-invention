@@ -1,16 +1,14 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import {
-  RegistrationData,
-  useRegisterMutation,
-} from "@/lib/redux/services/api";
+import { useRegisterMutation } from "@/lib/redux/services/member-api";
 import { useRouter } from "next/navigation";
 import { FiMail, FiLock, FiUser, FiEyeOff, FiEye } from "react-icons/fi";
 import LoginFooter from "@/components/footer/login";
 import { useState } from "react";
+import { RegistrationPayload } from "@/lib/redux/utils/types";
 
-type FormData = RegistrationData & {
+type FormData = RegistrationPayload & {
   confirmPassword: string;
 };
 
@@ -28,7 +26,7 @@ export default function RegisterPage() {
 
   const password = watch("password");
 
-  const onSubmit = async (data: RegistrationData) => {
+  const onSubmit = async (data: RegistrationPayload) => {
     try {
       await registerUser(data).unwrap();
       router.push("/login");
