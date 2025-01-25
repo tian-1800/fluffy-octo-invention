@@ -1,22 +1,10 @@
-'use client';
+"use client";
 
-import { useGetProfileQuery } from '@/lib/redux/services/api';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/lib/redux/store';
-import { FiUser } from 'react-icons/fi';
+import { useGetProfileQuery } from "@/lib/redux/services/api";
+import { FiUser } from "react-icons/fi";
 
 export default function Home() {
   const { data: profile, isLoading, error } = useGetProfileQuery();
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-    }
-  }, [isAuthenticated, router]);
 
   if (isLoading) {
     return (

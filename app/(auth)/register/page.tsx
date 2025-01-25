@@ -6,8 +6,9 @@ import {
   useRegisterMutation,
 } from "@/lib/redux/services/api";
 import { useRouter } from "next/navigation";
-import { FiMail, FiLock, FiUser } from "react-icons/fi";
+import { FiMail, FiLock, FiUser, FiEyeOff, FiEye } from "react-icons/fi";
 import LoginFooter from "@/components/footer/login";
+import { useState } from "react";
 
 type FormData = RegistrationData & {
   confirmPassword: string;
@@ -22,6 +23,8 @@ export default function RegisterPage() {
   } = useForm<FormData>();
   const [registerUser, { isLoading }] = useRegisterMutation();
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const password = watch("password");
 
@@ -72,16 +75,36 @@ export default function RegisterPage() {
                   <FiUser className="h-4 w-4 text-gray-400" />
                 </div>
                 <input
-                  {...register("name", {
+                  {...register("first_name", {
                     required: "Mohon masukkan nama depan",
                   })}
                   className="appearance-none block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="nama depan"
                 />
               </div>
-              {errors.name && (
+              {errors.first_name && (
                 <p className="mt-2 text-sm text-red-600">
-                  {errors.name.message}
+                  {errors.first_name.message}
+                </p>
+              )}
+            </div>
+
+            <div className="text-sm">
+              <div className="mt-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiUser className="h-4 w-4 text-gray-400" />
+                </div>
+                <input
+                  {...register("last_name", {
+                    required: "Mohon masukkan nama belakang",
+                  })}
+                  className="appearance-none block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="nama belakang"
+                />
+              </div>
+              {errors.last_name && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.last_name.message}
                 </p>
               )}
             </div>
@@ -92,7 +115,7 @@ export default function RegisterPage() {
                   <FiLock className="h-4 w-4 text-gray-400" />
                 </div>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   {...register("password", {
                     required: "Mohon masukkan password",
                     minLength: 6,
@@ -100,6 +123,17 @@ export default function RegisterPage() {
                   className="appearance-none block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="buat password"
                 />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <FiEyeOff className="h-4 w-4 text-gray-400 hover:text-gray-500" />
+                  ) : (
+                    <FiEye className="h-4 w-4 text-gray-400 hover:text-gray-500" />
+                  )}
+                </button>
               </div>
               {errors.password && (
                 <p className="mt-2 text-sm text-red-600">
@@ -114,7 +148,7 @@ export default function RegisterPage() {
                   <FiLock className="h-4 w-4 text-gray-400" />
                 </div>
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   {...register("confirmPassword", {
                     required: "Mohon konfirmasi password",
                     validate: (value) =>
@@ -123,6 +157,17 @@ export default function RegisterPage() {
                   className="appearance-none block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="konfirmasi password"
                 />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <FiEyeOff className="h-4 w-4 text-gray-400 hover:text-gray-500" />
+                  ) : (
+                    <FiEye className="h-4 w-4 text-gray-400 hover:text-gray-500" />
+                  )}
+                </button>
               </div>
               {errors.confirmPassword && (
                 <p className="mt-2 text-sm text-red-600">

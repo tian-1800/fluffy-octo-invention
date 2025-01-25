@@ -7,8 +7,13 @@ export type LoginData = {
 };
 export type RegistrationData = {
   email: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   password: string;
+};
+export type ProfileData = {
+  name: string;
+  email: string;
 };
 
 export const apiSlice = createApi({
@@ -32,17 +37,28 @@ export const apiSlice = createApi({
       }),
     }),
     register: builder.mutation<{ status: string }, RegistrationData>({
-      query: (newUserData) => ({
+      query: (userData) => ({
         url: "/registration",
         method: "POST",
-        body: newUserData,
+        body: userData,
       }),
     }),
-    getProfile: builder.query<{ name: string; email: string }, void>({
+    getProfile: builder.query<ProfileData, void>({
       query: () => "/profile",
+    }),
+    updateProfile: builder.mutation<{ status: string }, ProfileData>({
+      query: (userData) => ({
+        url: "/profile/update",
+        method: "PUT",
+        body: userData,
+      }),
     }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useGetProfileQuery } =
-  apiSlice;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+} = apiSlice;
