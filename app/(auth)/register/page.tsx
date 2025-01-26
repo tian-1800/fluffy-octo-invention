@@ -3,10 +3,11 @@
 import { useForm } from "react-hook-form";
 import { useRegisterMutation } from "@/lib/redux/services/member-api";
 import { useRouter } from "next/navigation";
-import { FiMail, FiLock, FiUser, FiEyeOff, FiEye } from "react-icons/fi";
+import { FiMail, FiLock, FiUser } from "react-icons/fi";
 import LoginFooter from "@/components/footer/login";
 import { useState } from "react";
 import { RegistrationPayload } from "@/lib/redux/utils/types";
+import VisibilityButton from "@/components/ui/visibility-button";
 
 type FormData = RegistrationPayload & {
   confirmPassword: string;
@@ -121,17 +122,11 @@ export default function RegisterPage() {
                   className="appearance-none block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="buat password"
                 />
-                <button
-                  type="button"
+                <VisibilityButton
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <FiEyeOff className="h-4 w-4 text-gray-400 hover:text-gray-500" />
-                  ) : (
-                    <FiEye className="h-4 w-4 text-gray-400 hover:text-gray-500" />
-                  )}
-                </button>
+                  showSecret={showPassword}
+                  setShowSecret={setShowPassword}
+                />
               </div>
               {errors.password && (
                 <p className="mt-2 text-sm text-red-600">
@@ -155,17 +150,11 @@ export default function RegisterPage() {
                   className="appearance-none block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="konfirmasi password"
                 />
-                <button
-                  type="button"
+                <VisibilityButton
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <FiEyeOff className="h-4 w-4 text-gray-400 hover:text-gray-500" />
-                  ) : (
-                    <FiEye className="h-4 w-4 text-gray-400 hover:text-gray-500" />
-                  )}
-                </button>
+                  showSecret={showConfirmPassword}
+                  setShowSecret={setShowConfirmPassword}
+                />
               </div>
               {errors.confirmPassword && (
                 <p className="mt-2 text-sm text-red-600">
