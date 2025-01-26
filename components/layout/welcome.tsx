@@ -27,7 +27,7 @@ export default function Welcome() {
 
   return (
     <div className="flex flex-col w-2/5 gap-1">
-      <div className="bg-indigo-100 text-sm p-3 rounded-full w-12 h-12 mb-4">
+      <div className="bg-indigo-100 text-sm p-3 rounded-full w-12 h-12 mb-6">
         <Image
           src={profile.profile_image}
           alt={profile.name}

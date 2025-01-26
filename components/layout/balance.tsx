@@ -26,7 +26,7 @@ function Balance() {
         <p>Saldo anda</p>
         <div className="text-2xl font-bold">Rp {balanceText}</div>
         <div className="flex gap-2 text-xs">
-          <span>Lihat saldo</span>
+          <span>{showBalance ? "Tutup saldo" : "Lihat saldo"}</span>
           <VisibilityButton
             iconClassName="text-white"
             showSecret={showBalance}
