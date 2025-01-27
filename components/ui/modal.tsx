@@ -1,16 +1,12 @@
 import { MouseEvent, ReactNode } from "react";
 
-interface AlertProps {
+interface Props {
   onClose?: () => void;
   children: ReactNode;
   className?: string;
 }
 
-const AlertContainer: React.FC<AlertProps> = ({
-  onClose,
-  children,
-  className,
-}) => {
+const Modal: React.FC<Props> = ({ onClose, children, className }) => {
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose?.();
@@ -31,4 +27,4 @@ const AlertContainer: React.FC<AlertProps> = ({
   );
 };
 
-export default AlertContainer;
+export default Modal;

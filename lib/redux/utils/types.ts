@@ -40,3 +40,20 @@ export type ServiceData = {
   service_icon: string;
   service_tariff: number;
 };
+
+export type TransactionData = {
+  invoice_number: string;
+  service_code: string;
+  service_name: string;
+  transaction_type: string;
+  total_amount: number;
+  created_on: string;
+};
+
+export type TransactionHistoryData = {
+  invoice_number: string;
+  transaction_type: string;
+  description: string;
+  total_amount: string;
+  created_on: string;
+};

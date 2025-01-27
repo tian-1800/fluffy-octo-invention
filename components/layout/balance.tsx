@@ -13,7 +13,9 @@ function Balance() {
   if (isLoading || !data || error) return null;
 
   const censoredDots = "•".repeat(String(data.balance).length);
-  const balanceText = showBalance ? String(data.balance) : censoredDots;
+  const balanceText = showBalance
+    ? data.balance.toLocaleString("id-ID")
+    : censoredDots;
 
   return (
     <div className="relative p-5 w-3/5">

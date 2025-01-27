@@ -1,4 +1,4 @@
-import AlertContainer from "../ui/alert-container";
+import Modal from "../ui/modal";
 
 interface AlertProps {
   onClose: () => void;
@@ -6,9 +6,9 @@ interface AlertProps {
 
 const SuccessAlert: React.FC<AlertProps> = ({ onClose }) => {
   return (
-    <AlertContainer onClose={onClose}>
+    <Modal onClose={onClose}>
       <p>Sukses</p>
-    </AlertContainer>
+    </Modal>
   );
 };
 

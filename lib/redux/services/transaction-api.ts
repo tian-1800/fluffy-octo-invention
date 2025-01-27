@@ -1,31 +1,70 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQuery } from "../utils/base-query";
-import { BalanceData, Response } from "../utils/types";
+import {
+  BalanceData,
+  Response,
+  TransactionData,
+  TransactionHistoryData,
+} from "../utils/types";
 
 export const transactionApi = createApi({
-  reducerPath: "transaction-api",
+  reducerPath: "transactionApi",
   baseQuery,
+  tagTypes: ["Balance"],
   endpoints: (builder) => ({
     getBalance: builder.query<BalanceData, void>({
       query: () => "/balance",
       transformResponse: (response: Response<BalanceData>) => response.data,
+      providesTags: ["Balance"],
     }),
-    createTopup: builder.mutation<BalanceData, { topup_amount: string }>({
-      query: (userData) => ({
+    createTopup: builder.mutation<
+      Response<BalanceData>,
+      { top_up_amount: string }
+    >({
+      query: (payload) => ({
         url: "/topup",
         method: "POST",
-        body: userData,
+        body: { top_up_amount: Number(payload.top_up_amount) },
       }),
-      transformResponse: (response: Response<BalanceData>) => response.data,
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            transactionApi.util.updateQueryData(
+              "getBalance",
+              undefined,
+              (draft) => {
+                draft.balance = data.data.balance;
+              }
+            )
+          );
+        } catch (error) {
+          console.error("Topup failed:", error);
+        }
+      },
     }),
-    // createTransaction: builder.mutation<{ service_code: string }, any>({
-    //   query: (userData) => ({
-    //     url: "/topup",
-    //     method: "POST",
-    //     body: userData,
-    //   }),
-    // }),
+    getTransactionHistory: builder.query<Array<TransactionHistoryData>, void>({
+      query: () => "/transaction/history",
+      transformResponse: (
+        response: Response<{ records: Array<TransactionHistoryData> }>
+      ) => response.data.records,
+    }),
+    createTransaction: builder.mutation<
+      Response<TransactionData>,
+      { service_code: string }
+    >({
+      query: (payload) => ({
+        url: "/transaction",
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 });
 
-export const { useCreateTopupMutation, useGetBalanceQuery } = transactionApi;
+export const {
+  useCreateTopupMutation,
+  useGetBalanceQuery,
+  useGetTransactionHistoryQuery,
+  useCreateTransactionMutation,
+} = transactionApi;
