@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import SuccessAlert from "@/components/account/success-alert";
 import { FaAt, FaPencil } from "react-icons/fa6";
 import ProfileImage from "@/components/ui/profile-image";
+import { setError } from "@/lib/redux/features/errorSlice";
 
 export default function AccountPage() {
   const dispatch = useDispatch();
@@ -49,6 +50,13 @@ export default function AccountPage() {
   ) => {
     const file = event.target.files?.[0];
     if (file) {
+      const MAX_SIZE = 100 * 1024;
+      if (file.size > MAX_SIZE) {
+        dispatch(
+          setError({ error_mesage: "Gambar tidak boleh melebihi 100KB." })
+        );
+        return;
+      }
       const formData = new FormData();
       formData.append("file", file);
 

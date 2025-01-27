@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 import NavBar from "@/components/layout/navbar";
+import ErrorSnackbar from "@/components/ui/error-snackbar";
 
 export default function ProtectedLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -23,7 +24,10 @@ export default function ProtectedLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <NavBar />
-      <main>{children}</main>
+      <main>
+        {children}
+        <ErrorSnackbar />
+      </main>
     </>
   );
 }
