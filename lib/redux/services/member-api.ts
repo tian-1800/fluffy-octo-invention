@@ -18,6 +18,7 @@ export const memberApi = createApi({
         method: "POST",
         body: credentials,
       }),
+      invalidatesTags: ["Profile"],
       transformResponse: (response: Response<{ token: string }>) => {
         return response.data.token;
       },

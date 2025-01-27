@@ -29,7 +29,8 @@ const ConfirmationModal: React.FC<AlertProps> = ({
     try {
       await proceed(amount);
       setStage("success");
-    } catch {
+    } catch (e) {
+      console.error(e);
       setStage("failed");
     }
   };

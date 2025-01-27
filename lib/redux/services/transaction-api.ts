@@ -19,7 +19,7 @@ export const transactionApi = createApi({
     }),
     createTopup: builder.mutation<
       Response<BalanceData>,
-      { top_up_amount: string }
+      { top_up_amount: number }
     >({
       query: (payload) => ({
         url: "/topup",
@@ -74,6 +74,9 @@ export const transactionApi = createApi({
         body: payload,
       }),
       invalidatesTags: ["Balance"],
+      transformErrorResponse: (response) => {
+        return (response.data as Response<string>).message;
+      },
     }),
   }),
 });

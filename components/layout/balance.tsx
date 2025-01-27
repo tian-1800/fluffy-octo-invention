@@ -8,7 +8,7 @@ import { useState } from "react";
 
 function Balance() {
   const { data, isLoading, error } = useGetBalanceQuery();
-  const [showBalance, setShowBalance] = useState(true);
+  const [showBalance, setShowBalance] = useState(false);
 
   if (isLoading || !data || error) return null;
 

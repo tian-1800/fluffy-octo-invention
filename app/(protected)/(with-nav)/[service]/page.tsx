@@ -71,7 +71,12 @@ export default function Service({ params }: { params: { service: string } }) {
           amount={service.service_tariff}
           onClose={() => setShowConfirmation(false)}
           proceed={async () => {
-            await createTransaction({ service_code: service.service_code });
+            const temp = await createTransaction({
+              service_code: service.service_code,
+            });
+            if ("error" in temp) {
+              throw temp.error;
+            }
           }}
         >
           <p className="text-sm">Beli {service.service_name} senilai</p>

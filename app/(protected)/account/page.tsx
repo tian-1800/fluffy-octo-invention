@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   useGetProfileQuery,
   useUpdateProfileMutation,
@@ -9,11 +8,13 @@ import {
 import { ProfileData } from "@/lib/redux/utils/types";
 import { useForm } from "react-hook-form";
 
-import { FiMail, FiUser } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
 import { useState } from "react";
 import { logout } from "@/lib/redux/features/authSlice";
 import { useDispatch } from "react-redux";
 import SuccessAlert from "@/components/account/success-alert";
+import { FaAt, FaPencil } from "react-icons/fa6";
+import ProfileImage from "@/components/ui/profile-image";
 
 export default function AccountPage() {
   const dispatch = useDispatch();
@@ -72,13 +73,8 @@ export default function AccountPage() {
   return (
     <section className="page-padding mt-8">
       <div className="flex flex-col items-center justify-center">
-        <div className="bg-indigo-100 text-sm p-3 rounded-full w-32 h-32 mb-6 flex items-center justify-center relative overflow-hidden">
-          <Image
-            src={profile.profile_image}
-            alt="Profile Image"
-            fill
-            className="object-cover rounded-full"
-          />
+        <div className="bg-indigo-100 text-sm p-3 rounded-full w-32 h-32 mb-6 flex items-center justify-center relative">
+          <ProfileImage />
           <input
             type="file"
             accept="image/*"
@@ -86,6 +82,9 @@ export default function AccountPage() {
             onChange={handleImageChange}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
+          <div className="absolute bottom-1 right-[-4px] bg-white p-1 border rounded-full shadow-sm z-100">
+            <FaPencil className="text-gray-600" />
+          </div>
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
           {profile.name}
@@ -101,7 +100,7 @@ export default function AccountPage() {
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiMail className="h-5 w-5 text-gray-400" />
+              <FaAt className="h-4 w-4" />
             </div>
             <input
               {...register("email", {
@@ -126,7 +125,7 @@ export default function AccountPage() {
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiUser className="h-5 w-5 text-gray-400" />
+              <FiUser className="h-4 w-4" />
             </div>
             <input
               {...register("first_name", {
@@ -152,7 +151,7 @@ export default function AccountPage() {
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiUser className="h-5 w-5 text-gray-400" />
+              <FiUser className="h-4 w-4" />
             </div>
             <input
               {...register("last_name", {

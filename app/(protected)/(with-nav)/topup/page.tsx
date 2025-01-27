@@ -1,6 +1,6 @@
 "use client";
 
-import TopupAlert from "@/components/topup/topup-alert";
+import ConfirmationModal from "@/components/ui/confirmation-modal";
 import { useCreateTopupMutation } from "@/lib/redux/services/transaction-api";
 import { useState } from "react";
 import { LuBatteryFull } from "react-icons/lu";
@@ -8,23 +8,31 @@ import { LuBatteryFull } from "react-icons/lu";
 const minTopup = 10000;
 const maxTopup = 1000000;
 
-export default function Transaction() {
-  const [, { isLoading }] = useCreateTopupMutation();
+export default function Topup() {
+  const [createTopup, { isLoading }] = useCreateTopupMutation();
 
-  const [amount, setAmount] = useState<number | undefined>();
+  const [amount, setAmount] = useState<string | number | undefined>();
   const [errorMessage, setErrorMessage] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleTopup = async () => {
-    if (!amount || amount < minTopup) {
+    if (!amount || Number(amount) < minTopup) {
       setErrorMessage("Minimal topup Rp10.000");
       return;
     }
-    if (amount > maxTopup) {
+    if (Number(amount) > maxTopup) {
       setErrorMessage("Maksimal topup Rp1.000.000");
       return;
     }
     setShowConfirmation(true);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === "" || !isNaN(Number(value))) {
+      setAmount(value === "" ? "" : Number(value));
+      setErrorMessage("");
+    }
   };
 
   return (
@@ -34,14 +42,10 @@ export default function Transaction() {
       <div className="grid grid-cols-8 gap-4 mt-8">
         <div className="col-span-5 appearance-none border border-gray-300 font-medium py-2 px-4 rounded relative">
           <input
-            type="number"
             name="nominal"
             value={amount}
             className="w-full pl-4 focus:outline-none focus:border-none"
-            onChange={(e) => {
-              setAmount(parseInt(e.target.value));
-              setErrorMessage("");
-            }}
+            onChange={handleInputChange}
             placeholder="masukkan nominal top up"
           />
           <div className="absolute inset-y-0 left-2 flex items-center pointer-events-none">
@@ -67,11 +71,26 @@ export default function Transaction() {
           <p className="col-span-5 mt-2 text-sm text-red-600">{errorMessage}</p>
         )}
       </div>
-      {showConfirmation && amount && (
-        <TopupAlert
-          amount={amount}
+      {showConfirmation && amount && Number(amount) > 0 && (
+        <ConfirmationModal
+          primaryMessage="Top Up sebesar"
+          proceedMessage="Ya, lanjutkan Top Up"
+          amount={Number(amount)}
           onClose={() => setShowConfirmation(false)}
-        />
+          proceed={async () => {
+            const temp = await createTopup({
+              top_up_amount: Number(amount),
+            });
+            if ("error" in temp) {
+              throw temp.error;
+            }
+          }}
+        >
+          <p className="text-sm">Anda yakin untuk Top Up sebesar</p>
+          <p className="font-bold text-xl">
+            Rp{amount.toLocaleString("id-ID")}?
+          </p>
+        </ConfirmationModal>
       )}
     </section>
   );

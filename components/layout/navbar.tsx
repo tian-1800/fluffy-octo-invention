@@ -34,8 +34,10 @@ export default function NavBar() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className={`inline-flex items-center text-gray-800 hover:font-bold focus:outline-none  ${
-                      isActive ? "text-red-500 " : ""
+                    className={`inline-flex items-center text-gray-800 hover:text-black focus:outline-none  ${
+                      isActive
+                        ? "text-red-500 hover:text-red-600 font-semibold"
+                        : ""
                     }`}
                   >
                     {label}
