@@ -22,10 +22,7 @@ export const memberApi = createApi({
         return response.data.token;
       },
       transformErrorResponse: (response) => {
-        return {
-          status: response.status,
-          message: "Gagal login. Silakan coba lagi",
-        };
+        return (response.data as Response<string>).message;
       },
     }),
     register: builder.mutation<{ status: string }, RegistrationPayload>({
@@ -34,6 +31,9 @@ export const memberApi = createApi({
         method: "POST",
         body: userData,
       }),
+      transformErrorResponse: (response) => {
+        return (response.data as Response<string>).message;
+      },
     }),
     getProfile: builder.query<ProfileData, void>({
       query: () => "/profile",
