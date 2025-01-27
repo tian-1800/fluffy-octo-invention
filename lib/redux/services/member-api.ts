@@ -19,6 +19,7 @@ export const memberApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ["Profile"],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginPayload>({
       query: (credentials) => ({
@@ -51,13 +52,50 @@ export const memberApi = createApi({
           name: `${response.data.first_name} ${response.data.last_name}`,
         };
       },
+      providesTags: ["Profile"],
     }),
-    updateProfile: builder.mutation<{ status: string }, ProfileData>({
+    updateProfile: builder.mutation<ProfileData, ProfileData>({
       query: (userData) => ({
         url: "/profile/update",
         method: "PUT",
         body: userData,
       }),
+      onQueryStarted: async (userData, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            memberApi.util.updateQueryData("getProfile", undefined, (draft) => {
+              Object.assign(draft, {
+                ...data,
+                name: `${data.first_name} ${userData.last_name}`,
+              });
+            })
+          );
+        } catch (err) {
+          console.error("Failed to update profile cache:", err);
+        }
+      },
+      invalidatesTags: ["Profile"],
+    }),
+    uploadProfileImage: builder.mutation<{ imageUrl: string }, FormData>({
+      query: (formData) => ({
+        url: "/profile/image",
+        method: "PUT",
+        body: formData,
+      }),
+      onQueryStarted: async (formData, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            memberApi.util.updateQueryData("getProfile", undefined, (draft) => {
+              draft.profile_image = data.imageUrl;
+            })
+          );
+        } catch (err) {
+          console.error("Failed to update profile cache:", err);
+        }
+      },
+      invalidatesTags: ["Profile"],
     }),
   }),
 });
@@ -67,4 +105,5 @@ export const {
   useRegisterMutation,
   useGetProfileQuery,
   useUpdateProfileMutation,
+  useUploadProfileImageMutation,
 } = memberApi;

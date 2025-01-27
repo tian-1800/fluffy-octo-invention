@@ -1,16 +1,28 @@
+"use client";
+
 import { ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
 import NavBar from "@/components/layout/navbar";
-import Welcome from "@/components/layout/welcome";
-import Balance from "@/components/layout/balance";
 
 export default function ProtectedLayout({ children }: { children: ReactNode }) {
+  const router = useRouter();
+
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, router]);
+
   return (
     <>
       <NavBar />
-      <div className="flex w-full justify-between gap-4 py-6 page-padding mb-12">
-        <Welcome />
-        <Balance />
-      </div>
       <main>{children}</main>
     </>
   );

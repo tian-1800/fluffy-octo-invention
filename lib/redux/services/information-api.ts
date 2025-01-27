@@ -3,7 +3,7 @@ import { baseQuery } from "../utils/base-query";
 import { BannerData, Response, ServiceData } from "../utils/types";
 
 export const informationApi = createApi({
-  reducerPath: "information-api",
+  reducerPath: "informationApi",
   baseQuery,
   endpoints: (builder) => ({
     getBanner: builder.query<Array<BannerData>, void>({
