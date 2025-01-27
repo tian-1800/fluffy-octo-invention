@@ -2,6 +2,7 @@
 
 import TransactionItem from "@/components/transaction/transaction-item";
 import { useGetTransactionHistoryQuery } from "@/lib/redux/services/transaction-api";
+import { getMonthNames } from "@/lib/utils/transaction-item";
 import { useState } from "react";
 
 export default function Transaction() {
@@ -19,11 +20,32 @@ export default function Transaction() {
     setOffset((prevOffset) => prevOffset + limit);
   };
 
-  if (error) return <div>Error loading services</div>;
+  if (error) return <div>Error loading Transactions</div>;
+  if (!isLoading && !transactions)
+    return (
+      <section className="page-padding">
+        <p className="font-semibold">Semua Transaksi</p>
+        <ul className="flex gap-4 mt-2">
+          {getMonthNames().map((month, i) => (
+            <li
+              key={month}
+              className={`font-bold  ${
+                i === 3 ? "text-gray-700" : "text-gray-300"
+              }`}
+            >
+              {month}
+            </li>
+          ))}
+        </ul>
+        <div className="flex w-full justify-center mt-24 text-sm text-gray-300">
+          Maaf tidak ada histori transaksi saat ini
+        </div>
+      </section>
+    );
 
   return (
-    <section className="flex flex-col gap-16 bg-gray-50 page-padding">
-      <p className="">Semua Transaksi</p>
+    <section className="flex flex-col gap-4 bg-gray-50 page-padding">
+      <p className="font-semibold">Semua Transaksi</p>
       <ul className="flex flex-col gap-4 overflow-x-auto">
         {isLoading && offset === 0
           ? Array.from({ length: 5 }).map((_, i) => <div key={i} />)

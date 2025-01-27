@@ -39,7 +39,7 @@ export const transactionApi = createApi({
             )
           );
         } catch (error) {
-          console.error("Topup failed:", error);
+          console.error("Topup failed: ", error);
         }
       },
     }),
@@ -54,15 +54,9 @@ export const transactionApi = createApi({
       transformResponse: (
         response: Response<{ records: Array<TransactionHistoryData> }>
       ) => response.data.records,
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName;
-      },
-      merge: (currentCache, newItems, { arg }) => {
-        if (arg.offset === 0) {
-          return newItems;
-        }
-        return [...currentCache, ...newItems];
-      },
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentCache, newItems, { arg }) =>
+        arg.offset === 0 ? newItems : [...currentCache, ...newItems],
       forceRefetch: ({ currentArg, previousArg }) => {
         return (
           currentArg?.offset !== previousArg?.offset ||

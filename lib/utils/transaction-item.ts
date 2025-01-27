@@ -1,7 +1,6 @@
 export function formatTransactionDate(date: string) {
   return new Date(date)
     .toLocaleString("id-ID", {
-      timeZone: "UTC",
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -28,4 +27,21 @@ export function formatTransactionDescription(description: string) {
   };
 
   return dict[description] || description;
+}
+
+export function getMonthNames(locale: string = "id-ID"): string[] {
+  const currentDate = new Date();
+  const monthNames: string[] = [];
+
+  for (let i = -3; i <= 1; i++) {
+    const date = new Date(currentDate);
+    date.setMonth(currentDate.getMonth() + i);
+
+    const monthName = new Intl.DateTimeFormat(locale, { month: "long" }).format(
+      date
+    );
+    monthNames.push(monthName);
+  }
+
+  return monthNames;
 }

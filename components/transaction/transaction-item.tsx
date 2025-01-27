@@ -4,7 +4,7 @@ import {
   formatTransactionAmount,
   formatTransactionDate,
   formatTransactionDescription,
-} from "@/lib/redux/utils/transaction-item";
+} from "@/lib/utils/transaction-item";
 import { TransactionHistoryData } from "@/lib/redux/utils/types";
 
 type Props = { data: TransactionHistoryData };
@@ -17,7 +17,7 @@ const TransactionItem = ({
   const formattedDescription = formatTransactionDescription(description);
 
   return (
-    <li className="flex justify-between border w-full p-2">
+    <li className="flex justify-between border rounded-md w-full p-2">
       <div className="flex flex-col gap-2">
         <p
           className={`${

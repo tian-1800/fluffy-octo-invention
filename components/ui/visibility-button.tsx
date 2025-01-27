@@ -14,7 +14,7 @@ const VisibilityButton = ({
   className,
   iconClassName,
 }: Props) => {
-  const iconStyle = `h-4 w-4 text-gray-400 hover:text-gray-500 ${iconClassName}`;
+  const iconStyle = `h-4 w-4 text-gray-400 ${iconClassName}`;
 
   return (
     <button

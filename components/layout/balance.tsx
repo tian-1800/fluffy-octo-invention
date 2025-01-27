@@ -30,7 +30,7 @@ function Balance() {
         <div className="flex gap-2 text-xs">
           <span>{showBalance ? "Tutup saldo" : "Lihat saldo"}</span>
           <VisibilityButton
-            iconClassName="text-white"
+            iconClassName="text-white h-3 w-3"
             showSecret={showBalance}
             setShowSecret={setShowBalance}
           />

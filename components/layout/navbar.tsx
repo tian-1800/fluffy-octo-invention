@@ -1,29 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { FiHome, FiUser } from "react-icons/fi";
+import { usePathname } from "next/navigation";
+import Logo from "@/assets/images/Logo.png";
+import Image from "next/image";
+
+const links = [
+  { href: "/topup", label: "Top Up" },
+  { href: "/transaction", label: "Transaction" },
+  { href: "/account", label: "Akun" },
+];
 
 export default function NavBar() {
+  const pathname = usePathname();
+
   return (
     <nav className="bg-white shadow border-b">
-      <div className="max-w-7xl page-padding">
-        <div className="flex justify-between h-16">
-          <div className="flex gap-2">
-            <Link
-              href="/"
-              className="inline-flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <FiHome className="h-5 w-5 mr-2" />
-              Home
-            </Link>
-            <Link
-              href="/account"
-              className="inline-flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <FiUser className="h-5 w-5 mr-2" />
-              Account
-            </Link>
-          </div>
+      <div className="page-padding">
+        <div className="flex justify-between h-16 w-full">
+          <Link
+            href="/"
+            className="flex gap-2 items-center text-gray-800 hover:text-gray-700 focus:outline-none "
+          >
+            <Image src={Logo} alt={"Logo"} width={20} height={20} />
+            <span>
+              <b>SIMS PPOB</b>-Septian
+            </span>
+          </Link>
+          <ul className="flex gap-8 items-center">
+            {links.map(({ href, label }) => {
+              const isActive = pathname === href;
+              return (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className={`inline-flex items-center text-gray-800 hover:font-bold focus:outline-none  ${
+                      isActive ? "text-red-500 " : ""
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </nav>

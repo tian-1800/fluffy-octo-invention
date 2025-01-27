@@ -3,6 +3,7 @@
 import TopupAlert from "@/components/topup/topup-alert";
 import { useCreateTopupMutation } from "@/lib/redux/services/transaction-api";
 import { useState } from "react";
+import { LuBatteryFull } from "react-icons/lu";
 
 const minTopup = 10000;
 const maxTopup = 1000000;
@@ -27,21 +28,28 @@ export default function Transaction() {
   };
 
   return (
-    <section className="flex flex-col gap-2bg-gray-50 page-padding">
+    <section className="flex flex-col gap-1 page-padding">
       <p className="">Silakan Masukkan</p>
-      <p className="text-xl">Nominal Topup</p>
-      <div className="grid grid-cols-8 gap-4 mt-4">
-        <input
-          type="number"
-          name="nominal"
-          value={amount}
-          className="col-span-5 appearance-none border border-gray-300 font-medium py-2 px-4 rounded"
-          onChange={(e) => {
-            setAmount(parseInt(e.target.value));
-            setErrorMessage("");
-          }}
-        />
-
+      <p className="text-2xl font-semibold">Nominal Top Up</p>
+      <div className="grid grid-cols-8 gap-4 mt-8">
+        <div className="col-span-5 appearance-none border border-gray-300 font-medium py-2 px-4 rounded relative">
+          <input
+            type="number"
+            name="nominal"
+            value={amount}
+            className="w-full pl-4 focus:outline-none focus:border-none"
+            onChange={(e) => {
+              setAmount(parseInt(e.target.value));
+              setErrorMessage("");
+            }}
+            placeholder="masukkan nominal top up"
+          />
+          <div className="absolute inset-y-0 left-2 flex items-center pointer-events-none">
+            <LuBatteryFull
+              className={`h-4 w-4 ${amount ? "text-black" : "text-gray-400"}`}
+            />
+          </div>
+        </div>
         <ButtonSet amount={10000} setAmount={setAmount} />
         <ButtonSet amount={20000} setAmount={setAmount} />
         <ButtonSet amount={50000} setAmount={setAmount} />
