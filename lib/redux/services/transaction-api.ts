@@ -43,11 +43,32 @@ export const transactionApi = createApi({
         }
       },
     }),
-    getTransactionHistory: builder.query<Array<TransactionHistoryData>, void>({
-      query: () => "/transaction/history",
+    getTransactionHistory: builder.query<
+      Array<TransactionHistoryData>,
+      { limit: number; offset: number }
+    >({
+      query: ({ limit, offset }) => ({
+        url: "/transaction/history",
+        params: { limit, offset },
+      }),
       transformResponse: (
         response: Response<{ records: Array<TransactionHistoryData> }>
       ) => response.data.records,
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg.offset === 0) {
+          return newItems;
+        }
+        return [...currentCache, ...newItems];
+      },
+      forceRefetch: ({ currentArg, previousArg }) => {
+        return (
+          currentArg?.offset !== previousArg?.offset ||
+          currentArg?.limit !== previousArg?.limit
+        );
+      },
     }),
     createTransaction: builder.mutation<
       Response<TransactionData>,

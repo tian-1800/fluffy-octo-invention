@@ -6,6 +6,7 @@ import { useCreateTransactionMutation } from "@/lib/redux/services/transaction-a
 import { slugify } from "@/lib/redux/utils/slugify";
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { LuBatteryFull } from "react-icons/lu";
 
 export default function Service({ params }: { params: { service: string } }) {
   const slug = params.service;
@@ -44,14 +45,19 @@ export default function Service({ params }: { params: { service: string } }) {
         <p className="font-semibold">{service.service_name}</p>
       </div>
       <div className="flex flex-col gap-4 mt-4">
-        <input
-          name="nominal"
-          value={tariffString}
-          className="col-span-5 appearance-none border border-gray-300 font-medium py-2 px-4 rounded"
-          disabled
-        />
+        <div className="relative border border-gray-300 font-medium py-2 px-4 rounded">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <LuBatteryFull className="h-4 w-4" />
+          </div>
+          <input
+            name="nominal"
+            value={tariffString}
+            className="appearance-none block w-full pl-6"
+            disabled
+          />
+        </div>
         <button
-          className="col-span-5 bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded disabled:bg-red-300"
+          className="bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded disabled:bg-red-300"
           disabled={isLoading}
           onClick={handlePay}
         >
