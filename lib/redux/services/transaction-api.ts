@@ -58,6 +58,7 @@ export const transactionApi = createApi({
         method: "POST",
         body: payload,
       }),
+      invalidatesTags: ["Balance"],
     }),
   }),
 });
